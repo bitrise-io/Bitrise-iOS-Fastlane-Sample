@@ -13,7 +13,7 @@ platform :ios do
     xcarchive(destination:"generic/platform=iOS", scheme:"BitriseTest", archive_path: "${BITRISE_DEPLOY_DIR}/BitriseTest.xcarchive")
   end
 
-  desc "Archive"
+  desc "Release"
   lane :release do
     gym(destination:"generic/platform=iOS", scheme:"BitriseTest", export_method: "development", build_path: ENV["BITRISE_DEPLOY_DIR"], output_directory: ENV["BITRISE_DEPLOY_DIR"])
   end
