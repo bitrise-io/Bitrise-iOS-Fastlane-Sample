@@ -10,7 +10,7 @@ platform :ios do
 
   desc "Archive"
   lane :archive do
-    xcarchive(destination:"generic/platform=iOS", scheme:"BitriseTest")
+    xcarchive(destination:"generic/platform=iOS", scheme:"BitriseTest", archive_path: "${$BITRISE_DEPLOY_DIR}/BitriseTest.xcarchive")
   end
 
 end
