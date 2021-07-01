@@ -1,5 +1,5 @@
 ---
-format_version: '8'
+format_version: '11'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ios
 trigger_map:
@@ -15,16 +15,12 @@ workflows:
     - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
-    - xcode-archive@3:
+    - recreate-user-schemes@1:
         inputs:
         - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-        - force_code_sign_identity: "$BITRISE_CODE_SIGNING_IDENTITY"
-        - force_provisioning_profile: "$BITRISE_PROFILE_ID"
-        - compile_bitcode: 'no'
-        - upload_bitcode: 'no'
-        - team_id: "$BITRISE_TEAM"
-        - export_method: "$BITRISE_EXPORT_METHOD"
+    - fastlane@3:
+        inputs:
+        - lane: ios release
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
   primary:
@@ -34,14 +30,24 @@ workflows:
     - git-clone@4: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
-    - xcode-test@2:
+    - recreate-user-schemes@1:
         inputs:
         - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
+    - fastlane@3:
+        inputs:
+        - lane: "$FASTLANE_LANE"
+        - work_dir: "$FASTLANE_WORK_DIR"
     - deploy-to-bitrise-io@1: {}
     - cache-push@2: {}
 app:
   envs:
+  - FASTLANE_XCODE_LIST_TIMEOUT: '120'
+  - opts:
+      is_expand: false
+    FASTLANE_WORK_DIR: "."
+  - opts:
+      is_expand: false
+    FASTLANE_LANE: ios build
   - opts:
       is_expand: false
     BITRISE_PROJECT_PATH: BitriseTest.xcodeproj
