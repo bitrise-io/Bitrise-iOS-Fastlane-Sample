@@ -37,7 +37,9 @@ workflows:
         inputs:
         - lane: "$FASTLANE_LANE"
         - work_dir: "$FASTLANE_WORK_DIR"
-    - deploy-to-bitrise-io@1: {}
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "/Users/vagrant/git/fastlane/test_output"
     - cache-push@2: {}
 app:
   envs:
@@ -47,7 +49,7 @@ app:
     FASTLANE_WORK_DIR: "."
   - opts:
       is_expand: false
-    FASTLANE_LANE: ios build
+    FASTLANE_LANE: ios tests
   - opts:
       is_expand: false
     BITRISE_PROJECT_PATH: BitriseTest.xcodeproj
@@ -66,3 +68,6 @@ app:
   - opts:
       is_expand: false
     BITRISE_TEAM: 72SA8V3WYL
+meta:
+  bitrise.io:
+    stack: osx-xcode-13.3.x
