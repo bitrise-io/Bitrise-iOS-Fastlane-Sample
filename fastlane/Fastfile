@@ -14,7 +14,26 @@ platform :ios do
 
   desc "Release"
   lane :release do
-    gym(destination:"generic/platform=iOS", scheme:"BitriseTest", export_method: "development", build_path: ENV["BITRISE_DEPLOY_DIR"], output_directory: ENV["BITRISE_DEPLOY_DIR"])
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      team_id: ENV["BITRISE_TEAM"],
+      profile_name: ENV["BITRISE_PROFILE_ID"],
+      code_sign_identity: ENV["BITRISE_CODE_SIGNING_IDENTITY"]
+    )
+    gym(
+      destination:"generic/platform=iOS",
+      scheme:"BitriseTest",
+      build_path: ENV["BITRISE_DEPLOY_DIR"],
+      output_directory: ENV["BITRISE_DEPLOY_DIR"],
+      export_method: ENV["BITRISE_DISTRIBUTION_METHOD"],
+      export_team_id: ENV["BITRISE_TEAM"],
+      export_options: {
+        provisioningProfiles: {
+          "com.bitrise.test.BitriseTest" => ENV["BITRISE_PROFILE_ID"],
+        }
+      },
+      codesigning_identity: ENV["BITRISE_CODE_SIGNING_IDENTITY"]
+    )
   end
 
 end
