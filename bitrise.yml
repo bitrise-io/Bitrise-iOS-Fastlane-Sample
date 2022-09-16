@@ -12,7 +12,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@6: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - recreate-user-schemes@1:
@@ -21,13 +21,13 @@ workflows:
     - fastlane@3:
         inputs:
         - lane: ios release
-    - deploy-to-bitrise-io@1: {}
+    - deploy-to-bitrise-io@2: {}
     - cache-push@2: {}
   primary:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4: {}
+    - git-clone@6: {}
     - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - recreate-user-schemes@1:
@@ -58,16 +58,17 @@ app:
     BITRISE_SCHEME: BitriseTest
   - opts:
       is_expand: false
-    BITRISE_EXPORT_METHOD: development
+    BITRISE_DISTRIBUTION_METHOD: development
   - opts:
       is_expand: false
-    BITRISE_PROFILE_ID: b103a1f0-1f51-4d53-a41f-c08719676e94
+    BITRISE_PROFILE_ID: BitriseBot-Wildcard
   - opts:
       is_expand: false
-    BITRISE_CODE_SIGNING_IDENTITY: 'iPhone Developer: Dev Portal Bot Bitrise (E89JV3W9K4)'
+    BITRISE_CODE_SIGNING_IDENTITY: Apple Development
   - opts:
       is_expand: false
     BITRISE_TEAM: 72SA8V3WYL
 meta:
   bitrise.io:
-    stack: osx-xcode-13.3.x
+    stack: osx-xcode-13.4.x
+    machine_type_id: g2.4core
